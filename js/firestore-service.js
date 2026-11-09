@@ -558,8 +558,22 @@ class FirestoreService {
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(db, null, 2));
     const dlAnchor = document.createElement('a');
     dlAnchor.setAttribute('href', dataStr);
-    dlAnchor.setAttribute('download', `UR-APP-backup-${new Date().toISOString().slice(0, 10)}.json`);
+    dlAnchor.setAttribute('download', `SIMRS-Care-backup-${new Date().toISOString().slice(0, 10)}.json`);
     dlAnchor.click();
+  }
+
+  async importDataJSON(jsonString) {
+    try {
+      const data = JSON.parse(jsonString);
+      if (!data.tickets || !data.users || !data.applications) {
+        throw new Error('Format berkas cadangan SIMRS tidak valid.');
+      }
+      this.saveLocalDB(data);
+      return true;
+    } catch (err) {
+      console.error('Gagal restore backup:', err);
+      throw err;
+    }
   }
 }
 

@@ -121,11 +121,51 @@ class AppController {
         </div>
 
         <!-- User Profile & Action Menu -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 sm:gap-3">
           <button onclick="window.navigateTo('helpcenter')" class="text-xs text-slate-600 hover:text-teal-700 font-semibold px-2.5 py-1.5 rounded-lg hover:bg-slate-100 transition hidden sm:flex items-center gap-1.5">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             SOP & Bantuan IT RS
           </button>
+
+          <!-- Notification Bell -->
+          <div class="relative">
+            <button onclick="window.toggleNotificationDropdown()" class="relative p-2 text-slate-500 hover:text-teal-700 hover:bg-slate-100 rounded-xl transition" title="Pemberitahuan Insiden SIMRS">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+              <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
+            </button>
+            <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-200 py-3 z-50 text-xs">
+              <div class="px-4 pb-2 border-b border-slate-100 flex items-center justify-between">
+                <span class="font-bold text-slate-800 text-xs">Pemberitahuan SIMRS</span>
+                <span class="text-[10px] text-teal-700 bg-teal-50 px-2 py-0.5 rounded font-bold">Terbaru</span>
+              </div>
+              <div class="divide-y divide-slate-50 max-h-72 overflow-y-auto">
+                <div onclick="window.openTicketDetail('ticket-farmasi-002'); window.toggleNotificationDropdown();" class="p-3 hover:bg-slate-50 cursor-pointer transition">
+                  <div class="font-semibold text-slate-800 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                    E-Resep Poli Dalam Ditugaskan
+                  </div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Hendra Kusuma (Programmer SIMRS) sedang menangani antrean depo farmasi.</div>
+                  <div class="text-[9px] text-slate-400 mt-1">10 menit yang lalu</div>
+                </div>
+                <div onclick="window.openTicketDetail('ticket-bpjs-001'); window.toggleNotificationDropdown();" class="p-3 hover:bg-slate-50 cursor-pointer transition">
+                  <div class="font-semibold text-slate-800 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    Bridging BPJS V-Claim Selesai
+                  </div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Service bridging telah normal dan SEP 12 pasien IGD berhasil dicetak.</div>
+                  <div class="text-[9px] text-slate-400 mt-1">1 jam yang lalu</div>
+                </div>
+                <div onclick="window.openTicketDetail('ticket-printer-003'); window.toggleNotificationDropdown();" class="p-3 hover:bg-slate-50 cursor-pointer transition">
+                  <div class="font-semibold text-slate-800 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                    Printer Barcode IGD Dibuka Kembali
+                  </div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">Ns. Ratna Sari (IGD) membuka kembali tiket karena stiker gelang macet lagi.</div>
+                  <div class="text-[9px] text-slate-400 mt-1">2 jam yang lalu</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Active User Badge -->
           <div class="flex items-center gap-2 pl-3 border-l border-slate-200">

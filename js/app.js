@@ -625,6 +625,37 @@ window.handleSyncSeedToFirebase = async () => {
   }
 };
 
+window.toggleNotificationDropdown = () => {
+  const el = document.getElementById('notifications-dropdown');
+  if (el) el.classList.toggle('hidden');
+};
+
+// Tutup dropdown notifikasi saat klik di luar
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('notifications-dropdown');
+  const btn = e.target.closest('button[onclick*="toggleNotificationDropdown"]');
+  if (dropdown && !dropdown.classList.contains('hidden') && !dropdown.contains(e.target) && !btn) {
+    dropdown.classList.add('hidden');
+  }
+});
+
+window.handleRestoreJSON = (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async (event) => {
+    try {
+      await firestoreService.importDataJSON(event.target.result);
+      Utils.showToast('Cadangan data SIMRS berhasil dipulihkan!', 'success');
+      window.location.reload();
+    } catch (err) {
+      Utils.showToast('Gagal memulihkan cadangan: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file);
+};
+
 window.exportBackupJSON = () => firestoreService.exportDataJSON();
 
 window.confirmResetDatabase = () => {

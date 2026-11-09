@@ -1,6 +1,6 @@
 /**
- * Tampilan Pimpinan (Executive / Management Dashboard)
- * Berdasarkan Dokumen Seksi 3, 11, 14: Indikator Evaluasi Layanan & Grafik Chart.js
+ * Tampilan Direksi & Pimpinan Rumah Sakit (Executive Dashboard)
+ * Evaluasi Kinerja Layanan IT RS & Kepatuhan Standar Akreditasi Rumah Sakit (STARKES)
  */
 
 import { firestoreService } from './firestore-service.js';
@@ -38,14 +38,14 @@ export const ExecutiveView = {
     const reopenedTickets = tickets.filter(t => (t.reopenedCount || 0) > 0);
     const reopenRate = tickets.length > 0 ? ((reopenedTickets.length / tickets.length) * 100).toFixed(1) : 0;
 
-    // 5. Kepuasan Pengguna (CSAT)
+    // 5. Kepuasan Pengguna Nakes (CSAT)
     let avgCSAT = 0;
     if (ratings.length > 0) {
       const sum = ratings.reduce((acc, r) => acc + Number(r.score), 0);
       avgCSAT = (sum / ratings.length).toFixed(1);
     }
 
-    // 6. Pola Masalah Berulang per Fitur/Menu
+    // 6. Pola Masalah Berulang per Modul Klinis
     const featureMap = {};
     tickets.forEach(t => {
       const key = `${t.appName} - ${t.featureName || 'Umum'}`;
@@ -58,43 +58,43 @@ export const ExecutiveView = {
 
     targetElement.innerHTML = `
       <div class="space-y-6">
-        <!-- Executive Header -->
+        <!-- Executive Hospital Header -->
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 class="text-xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-              Laporan Evaluasi Layanan & Analisis Kinerja
-              <span class="text-xs font-semibold px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-full">Dashboard Pimpinan</span>
+              Evaluasi Mutu Pelayanan IT & Kepatuhan SLA SIMRS
+              <span class="text-xs font-semibold px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-full">Direksi Rumah Sakit</span>
             </h1>
             <p class="text-xs text-slate-500">
-              Pemantauan indikator kinerja SLA, pola keluhan berulang, dan tingkat kepuasan pengguna (Seksi 14).
+              Laporan indikator mutu teknologi rumah sakit, kepatuhan respon insiden gawat darurat, dan kepuasan tenaga medis (STARKES Kemenkes).
             </p>
           </div>
           <div class="flex items-center gap-2">
             <button onclick="window.print()" class="px-3 py-1.5 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm transition">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-              Cetak / Ekspor Laporan
+              Cetak Laporan Mutu IT RS
             </button>
           </div>
         </div>
 
-        <!-- 5 Key Evaluation Indicator Cards (Seksi 14) -->
+        <!-- 5 Key Evaluation Indicator Cards (Standar Akreditasi RS) -->
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
           <!-- Indikator 1: Respons Pertama -->
           <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Respons Pertama</div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kecepatan Respon IT</div>
             <div class="text-xl font-black text-slate-800 mt-1">
               ${avgFRTMinutes > 0 ? `${avgFRTMinutes} Menit` : 'N/A'}
             </div>
-            <div class="text-[10px] text-slate-500 mt-1">Rata-rata waktu tanggapan awal</div>
+            <div class="text-[10px] text-teal-700 mt-1 font-medium">Target Mutu RS: &le; 15 menit</div>
           </div>
 
           <!-- Indikator 2: Waktu Penyelesaian -->
           <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Waktu Penyelesaian</div>
-            <div class="text-xl font-black text-sky-700 mt-1">
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Durasi Perbaikan</div>
+            <div class="text-xl font-black text-teal-700 mt-1">
               ${avgResMinutes > 0 ? (avgResMinutes > 60 ? `${(avgResMinutes / 60).toFixed(1)} Jam` : `${avgResMinutes} Menit`) : 'N/A'}
             </div>
-            <div class="text-[10px] text-slate-500 mt-1">Rata-rata tiket selesai</div>
+            <div class="text-[10px] text-slate-500 mt-1">Rata-rata sistem normal</div>
           </div>
 
           <!-- Indikator 3: Persentase Penyelesaian -->
@@ -103,46 +103,46 @@ export const ExecutiveView = {
             <div class="text-xl font-black text-emerald-600 mt-1">
               ${resolutionRate}%
             </div>
-            <div class="text-[10px] text-slate-500 mt-1">${closedOrResolvedCount} dari ${tickets.length} tiket tuntas</div>
+            <div class="text-[10px] text-slate-500 mt-1">${closedOrResolvedCount} dari ${tickets.length} insiden tuntas</div>
           </div>
 
           <!-- Indikator 4: Tiket Dibuka Kembali -->
           <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Tiket Dibuka Kembali</div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Insiden Berulang</div>
             <div class="text-xl font-black ${reopenedTickets.length > 0 ? 'text-rose-600' : 'text-slate-700'} mt-1">
               ${reopenRate}%
             </div>
-            <div class="text-[10px] text-slate-500 mt-1">${reopenedTickets.length} tiket perlu investigasi ulang</div>
+            <div class="text-[10px] text-slate-500 mt-1">${reopenedTickets.length} insiden perlu investigasi ulang</div>
           </div>
 
-          <!-- Indikator 5: Kepuasan Pengguna (CSAT) -->
+          <!-- Indikator 5: Kepuasan Pengguna Nakes (CSAT) -->
           <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kepuasan Pengguna</div>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kepuasan Nakes</div>
             <div class="text-xl font-black text-amber-500 mt-1 flex items-center gap-1">
               ${avgCSAT > 0 ? `${avgCSAT} ★` : 'Belum Ada'}
             </div>
-            <div class="text-[10px] text-slate-500 mt-1">${ratings.length} responden menilai</div>
+            <div class="text-[10px] text-slate-500 mt-1">${ratings.length} dokter/perawat menilai</div>
           </div>
         </div>
 
         <!-- Charts Grid (Chart.js) -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- Chart 1: Volume Tiket per Aplikasi -->
+          <!-- Chart 1: Volume Insiden per Modul SIMRS -->
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
-              <h3 class="font-bold text-sm text-slate-800">Distribusi Masalah per Aplikasi</h3>
-              <span class="text-xs text-slate-400">Pola beban sistem</span>
+              <h3 class="font-bold text-sm text-slate-800">Distribusi Insiden per Modul SIMRS</h3>
+              <span class="text-xs text-slate-400">Pola beban sistem rumah sakit</span>
             </div>
             <div class="h-64 relative">
               <canvas id="chart-app-distribution"></canvas>
             </div>
           </div>
 
-          <!-- Chart 2: Komposisi Jenis Umpan Balik -->
+          <!-- Chart 2: Komposisi Jenis Insiden -->
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
-              <h3 class="font-bold text-sm text-slate-800">Komposisi Jenis Umpan Balik</h3>
-              <span class="text-xs text-slate-400">Keluhan vs Bug vs Pertanyaan vs Saran</span>
+              <h3 class="font-bold text-sm text-slate-800">Komposisi Jenis Laporan Layanan IT</h3>
+              <span class="text-xs text-slate-400">Keluhan vs Error Bug vs Pertanyaan vs Usulan Alur</span>
             </div>
             <div class="h-64 relative">
               <canvas id="chart-feedback-type"></canvas>
@@ -156,14 +156,14 @@ export const ExecutiveView = {
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
             <div class="flex items-center justify-between">
               <div>
-                <h3 class="font-bold text-sm text-slate-800">Pola Masalah Berulang Teratas</h3>
-                <p class="text-xs text-slate-500">Fitur/menu aplikasi yang paling sering dilaporkan bermasalah</p>
+                <h3 class="font-bold text-sm text-slate-800">Pola Gangguan Klinis Berulang Teratas</h3>
+                <p class="text-xs text-slate-500">Fitur SIMRS / perangkat medis ruangan yang paling sering mengalami kendala</p>
               </div>
             </div>
 
             <div class="divide-y divide-slate-100 text-xs">
               ${recurringIssues.length === 0 ? `
-                <div class="py-6 text-center text-slate-400">Belum ada data laporan masalah.</div>
+                <div class="py-6 text-center text-slate-400">Belum ada data laporan insiden.</div>
               ` : recurringIssues.map((issue, idx) => `
                 <div class="py-3 flex items-center justify-between gap-3">
                   <div class="flex items-center gap-2.5 min-w-0">
@@ -173,19 +173,19 @@ export const ExecutiveView = {
                     <span class="font-semibold text-slate-800 truncate">${issue.name}</span>
                   </div>
                   <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 whitespace-nowrap">
-                    ${issue.count} Laporan
+                    ${issue.count} Insiden
                   </span>
                 </div>
               `).join('')}
             </div>
           </div>
 
-          <!-- Rating & Feedback Feed -->
+          <!-- Rating & Feedback Feed from Medical Staff -->
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
             <div class="flex items-center justify-between">
               <div>
-                <h3 class="font-bold text-sm text-slate-800">Ulasan Kepuasan Pengguna Terbaru</h3>
-                <p class="text-xs text-slate-500">Masukan dan penilaian skor layanan setelah tiket ditutup</p>
+                <h3 class="font-bold text-sm text-slate-800">Ulasan Kepuasan Tenaga Medis (Dokter & Nakes)</h3>
+                <p class="text-xs text-slate-500">Penilaian mutu respon IT RS setelah kendala klinis diselesaikan</p>
               </div>
             </div>
 
@@ -198,7 +198,7 @@ export const ExecutiveView = {
                     <span class="font-bold text-slate-800">${r.userName}</span>
                     <span class="text-amber-500 font-bold">${'★'.repeat(r.score)}${'☆'.repeat(5 - r.score)}</span>
                   </div>
-                  <p class="text-slate-600 italic">"${Utils.escapeHTML(r.comment || 'Tidak ada komentar.')}"</p>
+                  <p class="text-slate-600 italic">"${Utils.escapeHTML(r.comment || 'Tidak ada catatan.')}"</p>
                   <div class="text-[10px] text-slate-400">${Utils.formatDate(r.createdAt)}</div>
                 </div>
               `).join('')}
@@ -237,9 +237,9 @@ export const ExecutiveView = {
         data: {
           labels: Object.keys(appCounts),
           datasets: [{
-            label: 'Jumlah Tiket',
+            label: 'Jumlah Insiden',
             data: Object.values(appCounts),
-            backgroundColor: ['#0284c7', '#0d9488', '#f59e0b', '#6366f1', '#ec4899'],
+            backgroundColor: ['#0d9488', '#0284c7', '#f59e0b', '#6366f1', '#ec4899', '#14b8a6', '#8b5cf6'],
             borderRadius: 6
           }]
         },

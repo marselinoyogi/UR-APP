@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UR-APP - Sistem Pengelolaan Umpan Balik Pengguna</title>
+  <title>SIMRS Care & IT Support RS - Sistem Pengelolaan Layanan SIMRS</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -13,13 +13,13 @@
         extend: {
           colors: {
             brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0ea5e9',
-              600: '#0284c7',
-              700: '#0369a1',
-              800: '#075985',
-              900: '#0c4a6e',
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
             }
           }
         }
@@ -27,16 +27,16 @@
     }
   </script>
 
-  <!-- Chart.js for Dashboards & Metrics -->
+  <!-- Chart.js for Hospital Dashboards & SLA Metrics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Custom Styles -->
   <link rel="stylesheet" href="./css/styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230d9488'><path d='M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z'/></svg>">
 </head>
-<body class="bg-slate-100/70 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-sky-500 selection:text-white">
+<body class="bg-slate-100/70 text-slate-800 antialiased min-h-screen flex flex-col selection:bg-teal-500 selection:text-white">
 
-  <!-- Main Top Navigation Bar -->
+  <!-- Main Top Navigation Bar (SIMRS Hospital Header) -->
   <header id="app-header" class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
     <!-- Rendered dynamically by app.js -->
   </header>
@@ -58,24 +58,24 @@
     </div>
   </main>
 
-  <!-- Interactive Footer -->
+  <!-- Hospital Footer -->
   <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-2">
-        <span class="font-bold text-slate-700">UR-APP (User Response App)</span>
+        <span class="font-bold text-slate-700">SIMRS Care & IT Support RS (UR-APP Medika)</span>
         <span>•</span>
-        <span>Sistem Layanan Keluhan, Bug & Saran Berbasis Firebase</span>
+        <span>Pusat Layanan Insiden Sistem & Rekam Medis Elektronik Berbasis Firebase</span>
       </div>
       <div class="flex items-center gap-4 text-slate-400">
-        <span>Sesuai Dokumen Perancangan Konsep Web Aplikasi</span>
+        <span>Sesuai Standar Akreditasi Rumah Sakit (STARKES)</span>
         <span>•</span>
-        <button onclick="window.confirmResetDatabase()" class="hover:text-rose-600 underline">Reset Demo</button>
+        <button onclick="window.confirmResetDatabase()" class="hover:text-rose-600 underline">Reset Data RS</button>
       </div>
     </div>
   </footer>
 
   <!-- ======================================================== -->
-  <!-- MODAL: DETAIL TIKET & PERCAKAPAN                         -->
+  <!-- MODAL: DETAIL TIKET & PERCAKAPAN SIMRS                   -->
   <!-- ======================================================== -->
   <div id="ticket-detail-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 hidden">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-5xl max-h-[92vh] overflow-hidden flex flex-col transform transition-all animate-in fade-in zoom-in-95 duration-200">
@@ -86,7 +86,7 @@
   </div>
 
   <!-- ======================================================== -->
-  <!-- MODAL: FORMULIR BUAT LAPORAN TIKET BARU                 -->
+  <!-- MODAL: FORMULIR BUAT LAPORAN GANGGUAN SIMRS              -->
   <!-- ======================================================== -->
   <div id="create-ticket-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 hidden">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-3xl max-h-[92vh] overflow-hidden flex flex-col transform transition-all animate-in fade-in zoom-in-95 duration-200">
@@ -97,7 +97,7 @@
   </div>
 
   <!-- ======================================================== -->
-  <!-- MODAL: DIALOG AKSI (REOPEN / SOLVE NOTES)                 -->
+  <!-- MODAL: DIALOG AKSI (REOPEN / SOLVE NOTES / ADMIN CRUD)   -->
   <!-- ======================================================== -->
   <div id="action-dialog-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden transform transition-all">

@@ -1,106 +1,111 @@
-# UR-APP: Sistem Web Pengelolaan Umpan Balik Pengguna & Pelaporan Tiket
+# SIMRS Care & IT Support RS (UR-APP Medika)
 
-Aplikasi web modern berbasis **JavaScript** dan **Firebase** (Cloud Firestore & Authentication) yang dibangun sesuai dengan dokumen spesifikasi: **"Konsep Web Aplikasi Pengelolaan Umpan Balik Pengguna (Layanan Keluhan, Pelaporan Kesalahan, Pertanyaan, dan Saran Pengguna Aplikasi)"**.
+Sistem Web Pengelolaan Insiden, Keluhan, dan Dukungan Teknis **SIMRS (Sistem Informasi Manajemen Rumah Sakit)** berbasis **JavaScript** dan **Firebase** (Cloud Firestore & Authentication), dirancang khusus untuk skala operasional rumah sakit sesuai dengan **Standar Akreditasi Rumah Sakit (STARKES Kemenkes)** dan regulasi **Rekam Medis Elektronik (Permenkes No. 24/2022)**.
 
 ---
 
-## 🌟 Fitur Utama Berdasarkan Dokumen Spesifikasi
+## 🏥 Ruang Lingkup SIMRS & Modul Rumah Sakit
 
-| Seksi Dokumen | Fitur di UR-APP | Deskripsi Implementasi |
+Sistem ini memfasilitasi pelaporan gangguan, eskalasi penanganan, dan komunikasi antara seluruh unit klinis rumah sakit dengan **Instalasi Teknologi Informasi & SIMRS (IT RS)**:
+
+| Modul SIMRS | Deskripsi Layanan Klinis | Kategori Insiden Umum |
 | :--- | :--- | :--- |
-| **Seksi 1 & 9** | Skenario Aplikasi Akademik Kampus | Dilengkapi data riil kampus: Kasus KRS Mahasiswa (Error 500 Deadlock), Pembayaran UKT, Cetak KHS, dan Saran Dark Mode. |
-| **Seksi 3** | 5 Peran Pengguna (RBAC) | **Pengguna (Mahasiswa)**, **Petugas Layanan (Helpdesk)**, **Tim Teknis (Developer)**, **Administrator (PUSDATIN)**, dan **Pimpinan (Wakil Rektor)**. Dilengkapi panel cepat *Beralih Peran* di header untuk pengujian instan. |
-| **Seksi 4 & 5** | Formulir Umpan Balik Lengkap | Input nama aplikasi, menu/fitur, jenis umpan balik (Keluhan, Bug, Pertanyaan, Saran), judul, deskripsi rinci, langkah kejadian (*steps to reproduce*), waktu kejadian, deteksi otomatis perangkat & browser, serta lampiran berkas (gambar/PDF maks 5 MB). Disertai **Banner Peringatan Keamanan** (larangan memasukkan kata sandi / PIN). |
-| **Seksi 4** | Nomor Tiket Otomatis | Penomoran unik berformat standar `TKT-YYYYMMDD-XXXX`. |
-| **Seksi 6** | Aturan Prioritas Cerdas | Pengelompokan `Tinggi`, `Sedang`, `Rendah` berdasarkan dampak operasional dan urgensi layanan. |
-| **Seksi 7 & 8** | Siklus Status & Alur Penanganan | Siklus lengkap: `Baru` &rarr; `Diverifikasi` &rarr; `Diproses` &rarr; `Menunggu Pengguna` &rarr; `Terselesaikan` &rarr; `Ditutup`. |
-| **Seksi 8** | Pembukaan Kembali Tiket (*Reopen*) | Pengguna dapat membuka kembali tiket terselesaikan jika masalah belum tuntas. Sistem mengembalikan status ke `Diproses` dan mencatat alasan pembukaan kembali. |
-| **Seksi 4 & 12** | Percakapan Tiket (*Threaded Chat*) | Saluran komunikasi interaktif antara pengguna, petugas, dan tim teknis. Tim teknis dapat mengirim **Catatan Internal** yang hanya terlihat oleh staf. |
-| **Seksi 4, 12, 14** | Penilaian Layanan (CSAT) | Skor bintang 1 s/d 5 dan ulasan kepuasan pengguna setelah tiket diselesaikan. |
-| **Seksi 12 & 13** | Riwayat Aktivitas (*Audit Trail*) | Setiap perubahan status, penugasan petugas, pengiriman solusi, dan pemberian rating tercatat otomatis lengkap dengan waktu dan pelakunya. |
-| **Seksi 10 & 14** | Dashboard Evaluasi Pimpinan | 6 Indikator Evaluasi Layanan: Waktu Respons Pertama, Waktu Penyelesaian, Persentase Selesai, Rasio Reopen, Indeks Kepuasan Pengguna (CSAT), dan Grafik Chart.js (Distribusi Aplikasi & Jenis Umpan Balik). |
-| **Seksi 4 & 10** | Pusat Bantuan & FAQ | Panduan mandiri untuk kendala yang sering muncul sebelum pengguna membuat tiket. |
-| **Seksi 3 & 12** | Panel Administrator | Kelola akun pengguna, master aplikasi kampus, master kategori masalah, pencadangan data JSON, dan integrasi Firebase. |
+| **Bridging BPJS (V-Claim / E-Klaim)** | Penerbitan SEP online, bridging rujukan PCare, dan validasi fingerprint pasien. | *Timeout Webservice BPJS (Error 504), SEP Gagal Terbit, Fingerprint Error.* |
+| **Farmasi & E-Prescription** | Transmisi resep elektronik dokter poli ke antrean peracikan obat apotek rawat jalan & ranap. | *Resep Dokter Tidak Muncul di Depo, Printer Etiket Macet, Stok Depo Tidak Sinkron.* |
+| **IGD & Triage Darurat** | Registrasi gawat darurat, triase ATS, dan transfer pasien cepat. | *Printer Barcode Gelang Pasien Macet, Form Triase Error, Jaringan LAN IGD Offline.* |
+| **Rekam Medis Elektronik (RME)** | Pengisian CPPT terintegrasi (SOAP), asesmen awal medis/keperawatan, dan bridging SatuSehat. | *Gagal Kunci CPPT Dokter, Template Asesmen Hilang, Tanda Tangan Elektronik (TTE) Macet.* |
+| **Rawat Jalan & Poli Spesialis** | Panggilan antrean poliklinik, riwayat kunjungan pasien, dan rujukan internal. | *Antrean Poli Tidak Memanggil, Status Pemeriksaan Pasien Terkunci.* |
+| **Laboratorium & Radiologi (LIS/RIS)** | Order pemeriksaan darah, imaging rontgen/CT-Scan, dan transmisi hasil expertise. | *Koneksi Alat Analyzer Lab Terputus, Viewer PACS Radiologi Blank.* |
+| **Kasir & Billing Pasien** | Kalkulasi tarif tindakan, rincian biaya kamar ranap, deposit, dan cetak kuitansi. | *Rincian Tarif Tindakan Terkunci, Perhitungan Selisih Biaya Pasien BPJS Naik Kelas.* |
+
+---
+
+## 👥 5 Peran Pengguna Rumah Sakit (RBAC)
+
+Aplikasi dilengkapi fitur **Beralih Peran RS** di navigasi atas untuk pengujian instan:
+
+1. **Nakes / Ruangan (Pengguna)**:
+   - *dr. Bambang Hermanto, Sp.PD* (Dokter Spesialis Penyakit Dalam)
+   - *Ns. Ratna Sari, S.Kep* (Perawat Triage IGD)
+   - *Apt. Dewi Lestari, S.Farm* (Apoteker Depo Rawat Jalan)
+   - *Siti Fatimah, A.Md.RMIK* (Perekam Medis Admisi BPJS)
+   - *Hak Akses:* Melaporkan gangguan modul SIMRS, memantau penanganan teknis, konfirmasi penyelesaian, dan memberikan penilaian kepuasan (CSAT).
+2. **Helpdesk IT RS (Petugas Layanan)**:
+   - *Budi Prasetyo, S.Kom* (Helpdesk & Call Center SIMRS)
+   - *Hak Akses:* Triage insiden IT, memverifikasi tingkat kegentingan (Tinggi/Kritis, Sedang, Rendah), menugaskan programmer/teknisi jaringan, dan membalas tanggapan ruangan.
+3. **Tim IT RS (Tim Teknis)**:
+   - *Hendra Kusuma, S.T* (Programmer SIMRS & Integrasi BPJS/SatuSehat)
+   - *Bayu Setiawan, A.Md* (Teknisi Jaringan, Server & Hardware RS)
+   - *Hak Akses:* Menangani tiket penugasan, menambahkan **Catatan Teknis Internal**, mencatat tindakan perbaikan database/jaringan, dan mengubah status ke *Terselesaikan*.
+4. **Direksi Rumah Sakit (Pimpinan)**:
+   - *dr. H. Soebroto, Sp.OT, M.Kes* (Direktur Pelayanan Medik & Penunjang)
+   - *Hak Akses:* Memantau kepatuhan target SLA IT RS (&le; 15 menit respon awal untuk unit darurat), rasio uptime modul SIMRS, pola gangguan berulang per modul, dan grafik Chart.js.
+5. **Admin SIMRS (Administrator)**:
+   - *Ir. Andi Wijaya, M.Kom* (Kepala Instalasi SIMRS)
+   - *Hak Akses:* Manajemen master modul SIMRS, kategori gangguan medis, akun staf medis & IT, unduh cadangan data JSON, dan integrasi Firebase Cloud Firestore.
+
+---
+
+## 🔒 Kepatuhan Privasi Data Medis (Permenkes No. 24/2022 & UU PDP)
+
+Formulir laporan insiden dilengkapi **Banner Peringatan Kerahasiaan Data Medis**:
+> *"Dilarang menyertakan Nomor NIK, Nama Lengkap Pasien, atau data rekam medis rahasia pada tangkapan layar publik demi mematuhi privasi data medis pasien dan UU Perlindungan Data Pribadi."*
 
 ---
 
 ## 🚀 Cara Menjalankan Aplikasi
 
-Aplikasi dibangun menggunakan **HTML5, Tailwind CSS, Modular JavaScript (ES Modules), dan Firebase SDK v10**. Aplikasi dapat langsung dijalankan tanpa perlu proses *build* yang rumit!
+Aplikasi dibangun menggunakan **HTML5, Tailwind CSS, Modular JavaScript (ES Modules), dan Firebase SDK v10**.
 
-### Menjalankan Server Lokal (Disarankan):
-Buka terminal pada direktori proyek `/Users/user/Documents/GitHub/UR-APP` dan jalankan salah satu perintah berikut:
-
+### Menjalankan Server Lokal:
+Aplikasi saat ini telah berjalan pada port 3000. Untuk menjalankan ulang melalui terminal:
 ```bash
-# Menggunakan Python 3:
+cd /Users/user/Documents/GitHub/UR-APP
 python3 -m http.server 3000
-
-# Atau menggunakan npm:
+# atau
 npm start
 ```
-
-Kemudian buka peramban (*browser*) Anda di:
+Buka di browser:
 👉 **`http://localhost:3000`**
 
 ---
 
 ## 🗄️ Konfigurasi Database Firebase (Cloud Firestore)
 
-UR-APP memiliki arsitektur **Dual-Engine Firebase**:
-1. **Mode Demo / Local Storage (Bawaan Aktif):**
-   Aplikasi langsung dapat digunakan dan diuji coba seketika tanpa perlu konfigurasi awal. Seluruh data (skenario mahasiswa KRS, helpdesk, tim teknis, pimpinan) sudah terisi otomatis.
+1. **Mode Local Storage RS (Default):**
+   Langsung aktif dengan data contoh insiden rumah sakit (Bridging BPJS IGD, E-Resep Poli Dalam, Printer Barcode Gelang Pasien).
 2. **Mode Live Firebase Cloud Firestore:**
-   Untuk menghubungkan ke Firebase Anda secara langsung:
-   - Buat proyek di [Firebase Console](https://console.firebase.google.com).
-   - Aktifkan **Cloud Firestore** pada menu *Build > Firestore Database*.
-   - Buka menu **Admin** di aplikasi UR-APP, pilih tab **🔥 Pengaturan Firebase (Database)**.
-   - Masukkan konfigurasi `apiKey`, `projectId`, dll., lalu klik **Simpan & Terapkan Konfigurasi**.
-   - Klik tombol **"↑ Unggah Data Contoh ke Firestore"** untuk langsung menyinkronkan seluruh master data ke cloud!
-   - File keamanan [firestore.rules](firestore.rules) telah disiapkan sesuai dengan matriks hak akses Seksi 13.
+   - Buka menu **Admin SIMRS** &rarr; tab **🔥 Pengaturan Firebase (Database)**.
+   - Masukkan `apiKey`, `projectId`, dll. dari Firebase Console.
+   - Klik **Simpan & Terapkan Konfigurasi** lalu klik **"↑ Unggah Data Contoh ke Firestore"**.
+   - Berkas keamanan [firestore.rules](firestore.rules) telah disesuaikan dengan matriks hak akses staf medis dan IT rumah sakit.
 
 ---
 
-## 👥 Akun Contoh & Pengujian Peran (Quick Role Switcher)
-
-Anda dapat berganti peran secara instan melalui tombol **Beralih Peran** di navigasi atas:
-
-1. **Pengguna (Mahasiswa)**: `budi.santoso@kampus.ac.id` (Budi Santoso)
-   - Buat tiket baru, pantau status tiket KRS, kirim balasan chat, beri rating bintang 5.
-2. **Petugas Layanan (Helpdesk)**: `petugas.siti@kampus.ac.id` (Siti Rahma, S.Kom)
-   - Antrean tiket baru, verifikasi laporan, ubah prioritas, dan tugaskan tim teknis.
-3. **Tim Teknis (Developer)**: `ahmad.fauzi@kampus.ac.id` (Ahmad Fauzi)
-   - Tangani tiket penugasan, catat catatan investigasi internal, dan kirim solusi perbaikan deadlock database.
-4. **Pimpinan (Wakil Rektor)**: `hendra.wijaya@kampus.ac.id` (Prof. Hendra Wijaya, Ph.D)
-   - Pantau metrik SLA waktu respons pertama, persentase resolusi, dan grafik visual Chart.js.
-5. **Administrator (PUSDATIN)**: `admin.pusdatin@kampus.ac.id`
-   - Manajemen master aplikasi, kategori, pengguna, cadangan data JSON, dan koneksi Firebase.
-
----
-
-## 📁 Struktur Direktori Proyek
+## 📁 Struktur Berkas Proyek
 
 ```
 UR-APP/
-├── index.html                 # Shell antarmuka utama (SPA), navigasi, dan modal
+├── index.html                 # Antarmuka utama SIMRS Care & IT Support RS
 ├── css/
-│   └── styles.css             # Desain kustom, tipografi, dan format cetak tiket
+│   └── styles.css             # Tema rumah sakit, tipografi & format cetak bukti insiden
 ├── js/
-│   ├── app.js                 # Router, inisialisasi aplikasi, dan event controller
-│   ├── firebase-config.js     # Manajer inisialisasi Firebase SDK v10 (Live & Local)
-│   ├── firestore-service.js   # Layanan basis data Firestore (CRUD tiket, chat, audit)
-│   ├── seed-data.js           # Dataset awal skenario akademik kampus (KRS, UKT, dsb)
-│   ├── auth.js                # Layanan autentikasi & manajemen sesi peran
-│   ├── utils.js               # Helper format tanggal, badge status, generator tiket, toast
-│   ├── ticket-detail.js       # Komponen modal detail tiket, chat thread, dan tindakan peran
-│   ├── create-ticket-modal.js # Formulir buat laporan umpan balik & unggah lampiran
-│   ├── view-user.js           # Tampilan dashboard pengguna / mahasiswa
-│   ├── view-officer.js        # Tampilan dashboard petugas helpdesk & verifikasi
-│   ├── view-tech.js           # Tampilan dashboard tim teknis & pencatatan perbaikan
-│   ├── view-executive.js      # Tampilan dashboard pimpinan & indikator evaluasi Chart.js
-│   ├── view-admin.js          # Tampilan manajemen aplikasi, kategori, user & Firebase
-│   └── view-helpcenter.js     # Pusat bantuan & FAQ kendala umum
-├── firestore.rules            # Aturan keamanan Cloud Firestore berbasis peran (RBAC)
-├── firebase.json              # Konfigurasi hosting & aturan Firebase
+│   ├── app.js                 # Router aplikasi SIMRS, controller peran & modal
+│   ├── firebase-config.js     # Manajer inisialisasi Firebase Cloud Firestore
+│   ├── firestore-service.js   # Layanan basis data (Tiket insiden, chat nakes, audit trail)
+│   ├── seed-data.js           # Dataset skenario rumah sakit (IGD, Farmasi, BPJS, RME)
+│   ├── auth.js                # Layanan sesi autentikasi staf rumah sakit
+│   ├── utils.js               # Helper tanggal Indonesia, badge prioritas RS, notifikasi toast
+│   ├── ticket-detail.js       # Komponen detail insiden klinis & percakapan nakes-IT
+│   ├── create-ticket-modal.js # Formulir lapor gangguan SIMRS & verifikasi privasi medis
+│   ├── view-user.js           # Dashboard tenaga medis / perawat / dokter
+│   ├── view-officer.js        # Dashboard triage & antrean helpdesk IT RS
+│   ├── view-tech.js           # Dashboard programmer & teknisi jaringan IT RS
+│   ├── view-executive.js      # Dashboard evaluasi mutu & kepatuhan SLA Direksi RS
+│   ├── view-admin.js          # Panel master modul SIMRS, kategori, dan user RS
+│   └── view-helpcenter.js     # Pusat bantuan & SOP penanganan gangguan sistem RS
+├── firestore.rules            # Aturan keamanan database Cloud Firestore berbasis peran
+├── firebase.json              # Konfigurasi hosting Firebase
 ├── package.json               # Konfigurasi proyek npm
-└── README.md                  # Dokumentasi teknis aplikasi
+└── README.md                  # Dokumentasi teknis SIMRS Care
 ```

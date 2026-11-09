@@ -1,6 +1,6 @@
 /**
- * UR-APP: Controller Utama dan Router Aplikasi
- * Mengatur Navigasi Peran, Event Global, dan Sinkronisasi UI
+ * UR-APP: Controller Utama dan Router Aplikasi SIMRS Hospital Support
+ * Instalasi SIMRS & Dukungan Teknologi Informasi Rumah Sakit
  */
 
 import { firebaseManager } from './firebase-config.js';
@@ -24,7 +24,7 @@ class AppController {
   }
 
   async init() {
-    // 1. Inisialisasi Firebase Manager (Live or Fallback)
+    // 1. Inisialisasi Firebase Manager (Live or Fallback Local)
     await firebaseManager.initialize();
 
     // 2. Inisialisasi Auth Session
@@ -59,7 +59,7 @@ class AppController {
       this.currentView = 'user';
       return;
     }
-    if (this.currentView === 'helpcenter') return; // Keep help center open if chosen
+    if (this.currentView === 'helpcenter') return; // Pertahankan help center jika sedang dibuka
 
     const role = user.role;
     if (role === 'petugas') this.currentView = 'officer';
@@ -76,15 +76,15 @@ class AppController {
 
     headerEl.innerHTML = `
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-        <!-- Logo & Title -->
+        <!-- Logo & Title Hospital SIMRS -->
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-md">
-            UR
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-600 flex items-center justify-center text-white font-black text-xl shadow-md">
+            ✚
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="font-black text-slate-800 text-base tracking-tight">UR-APP</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-sky-100 text-sky-800">SIAKAD Feedback</span>
+              <span class="font-black text-slate-800 text-base tracking-tight">SIMRS Care</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800">IT Support RS</span>
               ${firebaseManager.isLive ? `
                 <span class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
                   <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -92,45 +92,45 @@ class AppController {
                 </span>
               ` : `
                 <span class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200" title="Klik menu Admin untuk menghubungkan Firestore live">
-                  Local Mode
+                  Local Mode RS
                 </span>
               `}
             </div>
-            <p class="text-[10px] text-slate-400 hidden sm:block">Sistem Pengelolaan Umpan Balik & Pelaporan Kesalahan Pengguna</p>
+            <p class="text-[10px] text-slate-400 hidden sm:block">Instalasi TI & Layanan Dukungan SIMRS Rumah Sakit</p>
           </div>
         </div>
 
-        <!-- Role Quick Switcher Bar (For Demo & Evaluation) -->
+        <!-- Role Quick Switcher Bar (Demo Skala RS) -->
         <div class="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
-          <span class="text-[10px] font-bold text-slate-400 uppercase px-2">Beralih Peran:</span>
-          <button onclick="window.switchRoleDemo('pengguna')" class="px-2.5 py-1 rounded-lg font-semibold transition ${currentUser.role === 'pengguna' ? 'bg-white text-sky-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
-            Pengguna
+          <span class="text-[10px] font-bold text-slate-400 uppercase px-2">Beralih Peran RS:</span>
+          <button onclick="window.switchRoleDemo('pengguna')" class="px-2.5 py-1 rounded-lg font-semibold transition ${currentUser.role === 'pengguna' ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+            Nakes / Ruangan
           </button>
           <button onclick="window.switchRoleDemo('petugas')" class="px-2.5 py-1 rounded-lg font-semibold transition ${currentUser.role === 'petugas' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
-            Petugas
+            Helpdesk IT
           </button>
-          <button onclick="window.switchRoleDemo('teknis')" class="px-2.5 py-1 rounded-lg font-semibold transition ${currentUser.role === 'teknis' ? 'bg-white text-teal-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
-            Tim Teknis
+          <button onclick="window.switchRoleDemo('teknis')" class="px-2.5 py-1 rounded-lg font-semibold transition ${currentUser.role === 'teknis' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
+            Tim IT RS
           </button>
           <button onclick="window.switchRoleDemo('pimpinan')" class="px-2.5 py-1 rounded-lg font-semibold transition ${currentUser.role === 'pimpinan' ? 'bg-white text-amber-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
-            Pimpinan
+            Direksi RS
           </button>
           <button onclick="window.switchRoleDemo('admin')" class="px-2.5 py-1 rounded-lg font-semibold transition ${currentUser.role === 'admin' ? 'bg-white text-violet-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}">
-            Admin
+            Admin SIMRS
           </button>
         </div>
 
         <!-- User Profile & Action Menu -->
         <div class="flex items-center gap-3">
-          <button onclick="window.navigateTo('helpcenter')" class="text-xs text-slate-600 hover:text-sky-600 font-semibold px-2.5 py-1.5 rounded-lg hover:bg-slate-100 transition hidden sm:flex items-center gap-1.5">
+          <button onclick="window.navigateTo('helpcenter')" class="text-xs text-slate-600 hover:text-teal-700 font-semibold px-2.5 py-1.5 rounded-lg hover:bg-slate-100 transition hidden sm:flex items-center gap-1.5">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Pusat Bantuan
+            SOP & Bantuan IT RS
           </button>
 
           <!-- Active User Badge -->
           <div class="flex items-center gap-2 pl-3 border-l border-slate-200">
             <div class="w-8 h-8 rounded-full overflow-hidden border border-slate-300 shrink-0">
-              <img src="${currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0D8ABC&color=fff`}" alt="${currentUser.name}" class="w-full h-full object-cover">
+              <img src="${currentUser.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=0D9488&color=fff`}" alt="${currentUser.name}" class="w-full h-full object-cover">
             </div>
             <div class="hidden sm:block text-left text-xs">
               <div class="font-bold text-slate-800 leading-tight">${currentUser.name}</div>
@@ -180,7 +180,7 @@ window.navigateTo = (viewName) => appController.navigateTo(viewName);
 
 window.refreshView = () => {
   appController.renderCurrentView();
-  Utils.showToast('Data berhasil diperbarui', 'info');
+  Utils.showToast('Data SIMRS berhasil diperbarui', 'info');
 };
 
 // --- Peran & Demo Switcher ---
@@ -231,9 +231,9 @@ function renderAttachmentPreview() {
   const list = document.getElementById('attachments-preview-list');
   if (!list) return;
   list.innerHTML = CreateTicketModal.selectedAttachments.map((att, i) => `
-    <div class="px-2.5 py-1.5 bg-sky-50 border border-sky-200 rounded-lg text-xs flex items-center gap-2">
-      <span class="truncate max-w-[150px] font-medium text-sky-900">${Utils.escapeHTML(att.name)}</span>
-      <span class="text-[10px] text-sky-600">(${att.size})</span>
+    <div class="px-2.5 py-1.5 bg-teal-50 border border-teal-200 rounded-lg text-xs flex items-center gap-2">
+      <span class="truncate max-w-[150px] font-medium text-teal-900">${Utils.escapeHTML(att.name)}</span>
+      <span class="text-[10px] text-teal-600">(${att.size})</span>
       <button type="button" onclick="window.removeAttachment(${i})" class="text-rose-500 hover:text-rose-700 font-bold ml-1">&times;</button>
     </div>
   `).join('');
@@ -244,7 +244,7 @@ window.removeAttachment = (index) => {
   renderAttachmentPreview();
 };
 
-// Submit Buat Tiket
+// Submit Buat Tiket Gangguan SIMRS
 window.handleCreateTicketSubmit = async (e) => {
   e.preventDefault();
   const currentUser = authService.getCurrentUser();
@@ -252,8 +252,8 @@ window.handleCreateTicketSubmit = async (e) => {
 
   const appSelect = document.getElementById('form-app-id');
   const appId = appSelect.value;
-  const appName = appSelect.options[appSelect.selectedIndex]?.getAttribute('data-appname') || 'Aplikasi';
-  const feedbackType = document.querySelector('input[name="feedbackType"]:checked')?.value || 'Keluhan';
+  const appName = appSelect.options[appSelect.selectedIndex]?.getAttribute('data-appname') || 'Modul SIMRS';
+  const feedbackType = document.querySelector('input[name="feedbackType"]:checked')?.value || 'Kesalahan';
   const featureName = document.getElementById('form-feature-name')?.value.trim();
   const title = document.getElementById('form-title')?.value.trim();
   const description = document.getElementById('form-description')?.value.trim();
@@ -261,9 +261,10 @@ window.handleCreateTicketSubmit = async (e) => {
   const incidentTime = document.getElementById('form-incident-time')?.value;
   const deviceBrowser = document.getElementById('form-device-browser')?.value.trim();
 
-  // Tentukan default prioritas berdasarkan kategori / jenis (Seksi 6)
+  // Tentukan default prioritas berdasarkan unit/kategori kritis (IGD, BPJS, Farmasi = Tinggi)
   let priority = 'Sedang';
-  if (title.toLowerCase().includes('database') || title.toLowerCase().includes('krs') || title.toLowerCase().includes('error 500')) {
+  const lowerTitle = (title + ' ' + appName + ' ' + featureName).toLowerCase();
+  if (lowerTitle.includes('igd') || lowerTitle.includes('bpjs') || lowerTitle.includes('timeout') || lowerTitle.includes('farmasi') || lowerTitle.includes('resep') || lowerTitle.includes('billing')) {
     priority = 'Tinggi';
   } else if (feedbackType === 'Saran' || feedbackType === 'Pertanyaan') {
     priority = 'Rendah';
@@ -287,7 +288,7 @@ window.handleCreateTicketSubmit = async (e) => {
       attachments: CreateTicketModal.selectedAttachments
     }, currentUser);
 
-    Utils.showToast(`Laporan berhasil dikirim dengan Nomor Tiket: ${newTicket.ticketNumber}`, 'success', 'Tiket Dibuat');
+    Utils.showToast(`Laporan insiden SIMRS berhasil dikirim: ${newTicket.ticketNumber}`, 'success', 'Tiket Diterima IT RS');
     CreateTicketModal.close();
     // Buka langsung tiket yang baru dibuat
     TicketDetail.open(newTicket.id);
@@ -325,18 +326,18 @@ window.handleStatusChange = async (ticketId, newStatus, notes = '') => {
   const currentUser = authService.getCurrentUser();
   try {
     await firestoreService.updateTicketStatus(ticketId, newStatus, currentUser, notes);
-    Utils.showToast(`Status tiket diubah menjadi "${newStatus}"`, 'success');
+    Utils.showToast(`Status insiden SIMRS diubah ke "${newStatus}"`, 'success');
     await TicketDetail.render();
   } catch (err) {
     Utils.showToast('Gagal mengubah status: ' + err.message, 'error');
   }
 };
 
-// Verifikasi Cepat oleh Petugas
+// Verifikasi Cepat oleh Helpdesk IT RS
 window.handleQuickVerify = async (ticketId) => {
   const currentUser = authService.getCurrentUser();
-  await firestoreService.updateTicketStatus(ticketId, 'Diverifikasi', currentUser, 'Laporan telah diverifikasi oleh petugas.');
-  Utils.showToast('Tiket telah diverifikasi!', 'success');
+  await firestoreService.updateTicketStatus(ticketId, 'Diverifikasi', currentUser, 'Laporan insiden diverifikasi oleh Helpdesk IT RS.');
+  Utils.showToast('Laporan SIMRS telah diverifikasi!', 'success');
   appController.renderCurrentView();
 };
 
@@ -344,15 +345,15 @@ window.handleQuickVerify = async (ticketId) => {
 window.handlePriorityChange = async (ticketId, newPriority) => {
   const currentUser = authService.getCurrentUser();
   try {
-    await firestoreService.updateTicket(ticketId, { priority: newPriority }, currentUser, 'PRIORITAS_DIUBAH', `Prioritas diubah menjadi "${newPriority}".`);
-    Utils.showToast(`Tingkat prioritas diubah ke ${newPriority}`, 'success');
+    await firestoreService.updateTicket(ticketId, { priority: newPriority }, currentUser, 'PRIORITAS_DIUBAH', `Tingkat kegentingan diubah menjadi "${newPriority}".`);
+    Utils.showToast(`Prioritas diubah ke ${newPriority}`, 'success');
     await TicketDetail.render();
   } catch (err) {
     Utils.showToast(err.message, 'error');
   }
 };
 
-// Tugaskan Tim Teknis
+// Tugaskan Tim IT RS (Programmer / Network)
 window.handleAssignTech = async (ticketId, techId) => {
   const currentUser = authService.getCurrentUser();
   if (!techId) return;
@@ -363,7 +364,7 @@ window.handleAssignTech = async (ticketId, techId) => {
 
   try {
     await firestoreService.assignTicket(ticketId, currentUser, techUser, currentUser);
-    Utils.showToast(`Tiket ditugaskan kepada: ${techUser.name}`, 'success');
+    Utils.showToast(`Tiket ditugaskan ke: ${techUser.name}`, 'success');
     await TicketDetail.render();
   } catch (err) {
     Utils.showToast(err.message, 'error');
@@ -374,8 +375,8 @@ window.handleAssignTech = async (ticketId, techId) => {
 window.handleConfirmClose = async (ticketId) => {
   const currentUser = authService.getCurrentUser();
   try {
-    await firestoreService.updateTicketStatus(ticketId, 'Ditutup', currentUser, 'Pengguna mengonfirmasi bahwa kendala telah selesai ditangani.');
-    Utils.showToast('Tiket telah ditutup. Terima kasih atas konfirmasi Anda!', 'success');
+    await firestoreService.updateTicketStatus(ticketId, 'Ditutup', currentUser, 'Petugas ruangan mengonfirmasi alur SIMRS telah normal kembali.');
+    Utils.showToast('Tiket insiden SIMRS telah ditutup. Terima kasih atas konfirmasinya!', 'success');
     await TicketDetail.render();
   } catch (err) {
     Utils.showToast(err.message, 'error');
@@ -393,15 +394,15 @@ window.promptReopenModal = (ticketId) => {
     <div class="p-6 space-y-4">
       <div class="flex items-center gap-2 text-rose-600 font-bold text-base">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-        Buka Kembali Tiket Pengaduan
+        Buka Kembali Tiket Insiden SIMRS
       </div>
       <p class="text-xs text-slate-600">
-        Jika masalah yang dilaporkan masih terjadi atau solusi belum memuaskan, jelaskan kendala yang masih Anda alami di bawah ini. Status tiket akan kembali menjadi <strong>Diproses</strong>.
+        Jika kendala pada modul SIMRS / perangkat ruangan masih berulang atau solusi IT belum berhasil, mohon jelaskan kendala yang dialami. Status tiket akan kembali menjadi <strong>Diproses</strong> oleh Tim IT RS.
       </p>
       <form onsubmit="window.handleReopenSubmit(event, '${ticketId}')" class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Alasan Pembukaan Kembali <span class="text-rose-500">*</span></label>
-          <textarea id="reopen-reason-input" rows="3" required placeholder="Contoh: Saya sudah coba kembali namun tombol simpan masih memunculkan pesan error yang sama..."
+          <textarea id="reopen-reason-input" rows="3" required placeholder="Contoh: Resep elektronik masih gagal terkirim pada pasien berikutnya di poli..."
             class="w-full text-xs p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 resize-none"></textarea>
         </div>
         <div class="flex items-center justify-end gap-2 pt-2">
@@ -422,14 +423,14 @@ window.handleReopenSubmit = async (e, ticketId) => {
   try {
     await firestoreService.updateTicketStatus(ticketId, 'Diproses', currentUser, reason);
     document.getElementById('action-dialog-modal')?.classList.add('hidden');
-    Utils.showToast('Tiket berhasil dibuka kembali untuk penanganan ulang.', 'info');
+    Utils.showToast('Tiket insiden dibuka kembali untuk penanganan lanjutan IT RS.', 'info');
     await TicketDetail.render();
   } catch (err) {
     Utils.showToast(err.message, 'error');
   }
 };
 
-// Modal Tim Teknis: Catat Solusi & Selesaikan
+// Modal Tim IT RS: Catat Solusi Teknis & Selesaikan
 window.promptSolveModal = (ticketId) => {
   const modal = document.getElementById('action-dialog-modal');
   const content = document.getElementById('action-dialog-content');
@@ -440,15 +441,15 @@ window.promptSolveModal = (ticketId) => {
     <div class="p-6 space-y-4">
       <div class="flex items-center gap-2 text-emerald-600 font-bold text-base">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        Pencatatan Solusi & Hasil Perbaikan (Tim Teknis)
+        Pencatatan Tindakan Perbaikan (Tim IT RS)
       </div>
       <p class="text-xs text-slate-600">
-        Catat tindakan perbaikan, perubahan konfigurasi/basis data, dan langkah pengujian yang telah Anda lakukan. Laporan akan ditandai dengan status <strong>Terselesaikan</strong> agar pelapor dapat mengonfirmasi.
+        Catat langkah investigasi, perbaikan database SIMRS, restart service/webservice BPJS, atau pergantian hardware ruangan. Status akan diubah menjadi <strong>Terselesaikan</strong>.
       </p>
       <form onsubmit="window.handleSolveSubmit(event, '${ticketId}')" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Penjelasan Solusi / Tindakan Perbaikan <span class="text-rose-500">*</span></label>
-          <textarea id="solve-notes-input" rows="3" required placeholder="Contoh: Kami telah mengoptimasi indexing database krs_detail dan me-reset session lock. Pengujian simpan KRS telah berhasil dilakukan."
+          <label class="block text-xs font-bold text-slate-700 mb-1">Hasil Perbaikan / Tindakan Teknis IT RS <span class="text-rose-500">*</span></label>
+          <textarea id="solve-notes-input" rows="3" required placeholder="Contoh: Service bridging VClaim BPJS telah di-restart dan sertifikat SSL diperbarui. Uji transaksi penerbitan SEP berhasil."
             class="w-full text-xs p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 resize-none"></textarea>
         </div>
         <div class="flex items-center justify-end gap-2 pt-2">
@@ -468,12 +469,12 @@ window.handleSolveSubmit = async (e, ticketId) => {
 
   try {
     // 1. Tambah pesan penjelasan ke thread
-    await firestoreService.addMessage(ticketId, currentUser, `[Hasil Perbaikan Tim Teknis]: ${notes}`, [], false);
+    await firestoreService.addMessage(ticketId, currentUser, `[Hasil Perbaikan Tim IT RS]: ${notes}`, [], false);
     // 2. Ubah status tiket ke Terselesaikan
     await firestoreService.updateTicketStatus(ticketId, 'Terselesaikan', currentUser, notes);
 
     document.getElementById('action-dialog-modal')?.classList.add('hidden');
-    Utils.showToast('Hasil perbaikan berhasil dicatat dan status telah diperbarui ke Terselesaikan!', 'success');
+    Utils.showToast('Hasil perbaikan IT RS berhasil dicatat & status diubah ke Terselesaikan!', 'success');
     await TicketDetail.render();
   } catch (err) {
     Utils.showToast(err.message, 'error');
@@ -491,7 +492,7 @@ window.handleRatingSubmit = async (e, ticketId) => {
 
   try {
     await firestoreService.addRating(ticketId, currentUser, Number(scoreInput.value), commentInput?.value.trim());
-    Utils.showToast('Terima kasih atas penilaian kepuasan Anda!', 'success');
+    Utils.showToast('Terima kasih atas penilaian pelayanan IT RS!', 'success');
     await TicketDetail.render();
   } catch (err) {
     Utils.showToast(err.message, 'error');
@@ -568,16 +569,16 @@ window.handleSaveFirebaseConfig = (e) => {
 };
 
 window.handleClearFirebaseConfig = () => {
-  if (confirm('Apakah Anda yakin ingin menghapus konfigurasi Firebase dan kembali ke mode Local Firestore?')) {
+  if (confirm('Hapus konfigurasi Firebase dan beralih ke Local Storage RS?')) {
     firebaseManager.resetConfig();
   }
 };
 
 window.handleSyncSeedToFirebase = async () => {
-  if (confirm('Unggah semua data contoh kampus ke Cloud Firestore Live Anda?')) {
+  if (confirm('Unggah semua data master SIMRS & skenario RS ke Cloud Firestore Live Anda?')) {
     try {
       await firestoreService.syncSeedToLiveFirestore();
-      Utils.showToast('Semua data contoh berhasil diunggah ke Firebase Cloud Firestore!', 'success');
+      Utils.showToast('Semua data modul SIMRS berhasil diunggah ke Firebase Cloud Firestore!', 'success');
     } catch (err) {
       Utils.showToast('Gagal mengunggah data: ' + err.message, 'error');
     }
@@ -587,11 +588,154 @@ window.handleSyncSeedToFirebase = async () => {
 window.exportBackupJSON = () => firestoreService.exportDataJSON();
 
 window.confirmResetDatabase = () => {
-  if (confirm('Apakah Anda yakin ingin mengembalikan seluruh data sistem ke contoh awal skenario kampus (KRS, UKT, dsb)?')) {
+  if (confirm('Kembalikan basis data ke data awal contoh insiden SIMRS Rumah Sakit (IGD, Farmasi, BPJS)?')) {
     firestoreService.resetToSeedData();
-    Utils.showToast('Basis data berhasil di-reset ke data awal skenario kampus.', 'success');
+    Utils.showToast('Basis data SIMRS berhasil di-reset ke data awal rumah sakit.', 'success');
     window.location.reload();
   }
+};
+
+// Admin Modals for Add Application, Category, User
+window.promptAddApplication = () => {
+  const modal = document.getElementById('action-dialog-modal');
+  const content = document.getElementById('action-dialog-content');
+  if (!modal || !content) return;
+  modal.classList.remove('hidden');
+  content.innerHTML = `
+    <div class="p-6 space-y-4">
+      <h3 class="font-bold text-slate-800 text-sm">Tambah Modul SIMRS Baru</h3>
+      <form onsubmit="window.saveNewApplication(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Modul SIMRS</label>
+          <input type="text" id="new-app-name" required placeholder="Contoh: SIMRS Medika - Modul Hemodialisa & ICU"
+            class="w-full text-xs p-2.5 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Deskripsi Ruang Lingkup</label>
+          <textarea id="new-app-desc" rows="2" placeholder="Pencatatan tindakan medis dan pemantauan pasien..."
+            class="w-full text-xs p-2.5 border border-slate-300 rounded-lg resize-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="document.getElementById('action-dialog-modal').classList.add('hidden')" class="px-3 py-1.5 text-xs text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-lg text-xs font-bold">Simpan Modul</button>
+        </div>
+      </form>
+    </div>
+  `;
+};
+
+window.saveNewApplication = async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('new-app-name')?.value.trim();
+  const description = document.getElementById('new-app-desc')?.value.trim();
+  if (!name) return;
+  await firestoreService.createApplication({ name, description });
+  document.getElementById('action-dialog-modal')?.classList.add('hidden');
+  Utils.showToast(`Modul "${name}" berhasil ditambahkan!`, 'success');
+  appController.renderCurrentView();
+};
+
+window.promptAddCategory = () => {
+  const modal = document.getElementById('action-dialog-modal');
+  const content = document.getElementById('action-dialog-content');
+  if (!modal || !content) return;
+  modal.classList.remove('hidden');
+  content.innerHTML = `
+    <div class="p-6 space-y-4">
+      <h3 class="font-bold text-slate-800 text-sm">Tambah Kategori Gangguan SIMRS</h3>
+      <form onsubmit="window.saveNewCategory(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Kategori</label>
+          <input type="text" id="new-cat-name" required placeholder="Contoh: Integrasi Alat Medis (LIS/PACS)"
+            class="w-full text-xs p-2.5 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Prioritas Bawaan (Default)</label>
+          <select id="new-cat-prio" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg bg-white">
+            <option value="Tinggi">Tinggi (Emergency / Alur Pasien Terhenti)</option>
+            <option value="Sedang" selected>Sedang (Terganggu, Ada Cara Manual)</option>
+            <option value="Rendah">Rendah (Kosmetik UI / Saran Klinis)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Deskripsi</label>
+          <textarea id="new-cat-desc" rows="2" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg resize-none"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="document.getElementById('action-dialog-modal').classList.add('hidden')" class="px-3 py-1.5 text-xs text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-lg text-xs font-bold">Simpan Kategori</button>
+        </div>
+      </form>
+    </div>
+  `;
+};
+
+window.saveNewCategory = async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('new-cat-name')?.value.trim();
+  const defaultPriority = document.getElementById('new-cat-prio')?.value || 'Sedang';
+  const description = document.getElementById('new-cat-desc')?.value.trim();
+  if (!name) return;
+  await firestoreService.createCategory({ name, defaultPriority, description });
+  document.getElementById('action-dialog-modal')?.classList.add('hidden');
+  Utils.showToast(`Kategori "${name}" berhasil ditambahkan!`, 'success');
+  appController.renderCurrentView();
+};
+
+window.promptAddUser = () => {
+  const modal = document.getElementById('action-dialog-modal');
+  const content = document.getElementById('action-dialog-content');
+  if (!modal || !content) return;
+  modal.classList.remove('hidden');
+  content.innerHTML = `
+    <div class="p-6 space-y-4">
+      <h3 class="font-bold text-slate-800 text-sm">Tambah Akun Nakes / Staf IT RS</h3>
+      <form onsubmit="window.saveNewUser(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
+          <input type="text" id="new-user-name" required placeholder="Contoh: dr. Anisa, Sp.A"
+            class="w-full text-xs p-2.5 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Email Resmi RS</label>
+          <input type="email" id="new-user-email" required placeholder="anisa@rsud-sehat.go.id"
+            class="w-full text-xs p-2.5 border border-slate-300 rounded-lg">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Peran / Hak Akses</label>
+          <select id="new-user-role" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg bg-white">
+            <option value="pengguna">Pengguna (Dokter / Perawat / Tenaga Medis)</option>
+            <option value="petugas">Petugas Layanan (Helpdesk IT RS)</option>
+            <option value="teknis">Tim Teknis (Programmer & Jaringan IT RS)</option>
+            <option value="pimpinan">Pimpinan (Direksi / Kepala Bidang RS)</option>
+            <option value="admin">Administrator SIMRS</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Ruangan / Instalasi Rumah Sakit</label>
+          <input type="text" id="new-user-dept" placeholder="Contoh: Poli Anak / Ruang ICU"
+            class="w-full text-xs p-2.5 border border-slate-300 rounded-lg">
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="document.getElementById('action-dialog-modal').classList.add('hidden')" class="px-3 py-1.5 text-xs text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-teal-600 text-white rounded-lg text-xs font-bold">Simpan Akun</button>
+        </div>
+      </form>
+    </div>
+  `;
+};
+
+window.saveNewUser = async (e) => {
+  e.preventDefault();
+  const name = document.getElementById('new-user-name')?.value.trim();
+  const email = document.getElementById('new-user-email')?.value.trim();
+  const role = document.getElementById('new-user-role')?.value || 'pengguna';
+  const department = document.getElementById('new-user-dept')?.value.trim() || 'Pelayanan RS';
+  if (!name || !email) return;
+  await firestoreService.createUser({ name, email, role, department });
+  document.getElementById('action-dialog-modal')?.classList.add('hidden');
+  Utils.showToast(`Akun ${name} berhasil dibuat!`, 'success');
+  appController.renderCurrentView();
 };
 
 // Boot App on DOM ready

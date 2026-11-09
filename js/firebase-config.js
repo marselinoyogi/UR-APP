@@ -77,3 +77,4 @@ class FirebaseManager {
 }
 
 export const firebaseManager = new FirebaseManager();
+

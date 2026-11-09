@@ -117,15 +117,15 @@ export const Utils = {
   },
 
   /**
-   * Role badge
+   * Role badge untuk konteks Rumah Sakit (SIMRS)
    */
   getRoleBadge(role) {
     const config = {
-      'pengguna': { label: 'Pengguna', class: 'bg-slate-100 text-slate-700 border-slate-200' },
-      'petugas': { label: 'Petugas Layanan', class: 'bg-blue-100 text-blue-800 border-blue-200' },
-      'teknis': { label: 'Tim Teknis', class: 'bg-teal-100 text-teal-800 border-teal-200' },
-      'admin': { label: 'Administrator', class: 'bg-violet-100 text-violet-800 border-violet-200' },
-      'pimpinan': { label: 'Pimpinan', class: 'bg-amber-100 text-amber-800 border-amber-200' }
+      'pengguna': { label: 'Tenaga Medis / Ruangan', class: 'bg-teal-50 text-teal-800 border-teal-200' },
+      'petugas': { label: 'Helpdesk IT RS', class: 'bg-blue-100 text-blue-800 border-blue-200' },
+      'teknis': { label: 'Tim IT RS (Programmer/Jaringan)', class: 'bg-emerald-100 text-emerald-800 border-emerald-200' },
+      'admin': { label: 'Admin SIMRS', class: 'bg-violet-100 text-violet-800 border-violet-200' },
+      'pimpinan': { label: 'Direksi Rumah Sakit', class: 'bg-amber-100 text-amber-800 border-amber-200' }
     };
     const roleInfo = config[role] || { label: role, class: 'bg-gray-100 text-gray-700 border-gray-200' };
     return `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${roleInfo.class}">${roleInfo.label}</span>`;
@@ -225,3 +225,4 @@ export const Utils = {
       .replace(/'/g, '&#039;');
   }
 };
+

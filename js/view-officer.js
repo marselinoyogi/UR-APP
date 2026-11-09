@@ -1,5 +1,5 @@
 /**
- * Tampilan Petugas Layanan (Helpdesk / Customer Service)
+ * Tampilan Helpdesk IT Rumah Sakit (Officer / Helpdesk SIMRS)
  * Berdasarkan Dokumen Seksi 3, 6, 7, 10
  */
 
@@ -18,7 +18,7 @@ export const OfficerView = {
     const tickets = await firestoreService.getAllTickets();
     const apps = await firestoreService.getAllApplications();
 
-    // Hitung metrik antrean
+    // Hitung metrik antrean insiden
     const countNew = tickets.filter(t => t.status === 'Baru').length;
     const countVerified = tickets.filter(t => t.status === 'Diverifikasi').length;
     const countProcessing = tickets.filter(t => t.status === 'Diproses').length;
@@ -53,10 +53,10 @@ export const OfficerView = {
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 class="text-xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-              Antrean & Verifikasi Tiket Layanan
-              <span class="text-xs font-semibold px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full">Petugas Helpdesk</span>
+              Antrean & Triage Insiden SIMRS
+              <span class="text-xs font-semibold px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-full">Helpdesk IT RS</span>
             </h1>
-            <p class="text-xs text-slate-500">Pusat penerimaan, verifikasi kelengkapan, penentuan prioritas, dan penugasan teknis.</p>
+            <p class="text-xs text-slate-500">Pusat penerimaan insiden sistem klinis, verifikasi urgensi medis, penentuan prioritas, dan penugasan tim IT RS.</p>
           </div>
           <div class="flex items-center gap-2">
             <button onclick="window.refreshView()" class="px-3 py-1.5 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm transition">
@@ -66,7 +66,7 @@ export const OfficerView = {
           </div>
         </div>
 
-        <!-- Priority Alert Bar if High Priority Open -->
+        <!-- Priority Alert Bar if High Priority Open (Unit Kritis) -->
         ${countHighPriorityUnresolved > 0 ? `
           <div class="p-4 bg-rose-50 border-l-4 border-rose-500 rounded-r-xl flex items-center justify-between gap-4 shadow-sm">
             <div class="flex items-center gap-3">
@@ -74,12 +74,12 @@ export const OfficerView = {
                 !
               </div>
               <div>
-                <h4 class="text-xs font-bold text-rose-900">Perhatian: ${countHighPriorityUnresolved} Tiket Prioritas Tinggi Membutuhkan Tindakan Segera</h4>
-                <p class="text-[11px] text-rose-700">Gangguan menghentikan layanan utama atau berdampak pada banyak pengguna kampus.</p>
+                <h4 class="text-xs font-bold text-rose-900">Perhatian: ${countHighPriorityUnresolved} Insiden SIMRS Prioritas Tinggi Membutuhkan Tindakan Segera</h4>
+                <p class="text-[11px] text-rose-700">Gangguan memengaruhi unit kritis (IGD / Farmasi / ICU / Bridging BPJS). Wajib respon dalam &le; 15 menit.</p>
               </div>
             </div>
             <button onclick="window.filterOfficerPriority('Tinggi')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-lg transition whitespace-nowrap shadow-sm">
-              Lihat Tiket Tinggi &rarr;
+              Lihat Insiden Kritis &rarr;
             </button>
           </div>
         ` : ''}
@@ -87,33 +87,33 @@ export const OfficerView = {
         <!-- Metric Stat Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
           <div onclick="window.filterOfficerStatus('Baru')" class="bg-white p-3.5 rounded-xl border ${this.statusFilter === 'Baru' ? 'border-blue-500 ring-2 ring-blue-200' : 'border-slate-200'} shadow-sm cursor-pointer hover:border-blue-400 transition">
-            <div class="text-[11px] font-semibold text-blue-600 uppercase">Perlu Verifikasi</div>
+            <div class="text-[11px] font-semibold text-blue-600 uppercase">Perlu Triage IT</div>
             <div class="text-xl font-black text-slate-800 mt-1">${countNew} Tiket</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Status Baru</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Status Baru Masuk</div>
           </div>
 
           <div onclick="window.filterOfficerStatus('Diverifikasi')" class="bg-white p-3.5 rounded-xl border ${this.statusFilter === 'Diverifikasi' ? 'border-indigo-500 ring-2 ring-indigo-200' : 'border-slate-200'} shadow-sm cursor-pointer hover:border-indigo-400 transition">
-            <div class="text-[11px] font-semibold text-indigo-600 uppercase">Diverifikasi</div>
+            <div class="text-[11px] font-semibold text-indigo-600 uppercase">Telah Diverifikasi</div>
             <div class="text-xl font-black text-slate-800 mt-1">${countVerified} Tiket</div>
             <div class="text-[10px] text-slate-400 mt-0.5">Siap Ditugaskan</div>
           </div>
 
           <div onclick="window.filterOfficerStatus('Diproses')" class="bg-white p-3.5 rounded-xl border ${this.statusFilter === 'Diproses' ? 'border-amber-500 ring-2 ring-amber-200' : 'border-slate-200'} shadow-sm cursor-pointer hover:border-amber-400 transition">
-            <div class="text-[11px] font-semibold text-amber-600 uppercase">Sedang Ditangani</div>
+            <div class="text-[11px] font-semibold text-amber-600 uppercase">Pengerjaan Tim IT</div>
             <div class="text-xl font-black text-slate-800 mt-1">${countProcessing} Tiket</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Tim Teknis Aktif</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Programmer/Jaringan Aktif</div>
           </div>
 
           <div onclick="window.filterOfficerStatus('Menunggu Pengguna')" class="bg-white p-3.5 rounded-xl border ${this.statusFilter === 'Menunggu Pengguna' ? 'border-purple-500 ring-2 ring-purple-200' : 'border-slate-200'} shadow-sm cursor-pointer hover:border-purple-400 transition">
-            <div class="text-[11px] font-semibold text-purple-600 uppercase">Menunggu Info</div>
+            <div class="text-[11px] font-semibold text-purple-600 uppercase">Menunggu Nakes</div>
             <div class="text-xl font-black text-slate-800 mt-1">${countWaitingUser} Tiket</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Respons Pelapor</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Uji Coba Ruangan</div>
           </div>
 
-          <div onclick="window.filterOfficerStatus('all')" class="bg-white p-3.5 rounded-xl border ${this.statusFilter === 'all' ? 'border-sky-500 ring-2 ring-sky-200' : 'border-slate-200'} shadow-sm cursor-pointer hover:border-sky-400 transition">
-            <div class="text-[11px] font-semibold text-slate-500 uppercase">Total Antrean</div>
+          <div onclick="window.filterOfficerStatus('all')" class="bg-white p-3.5 rounded-xl border ${this.statusFilter === 'all' ? 'border-teal-500 ring-2 ring-teal-200' : 'border-slate-200'} shadow-sm cursor-pointer hover:border-teal-400 transition">
+            <div class="text-[11px] font-semibold text-slate-500 uppercase">Total Insiden SIMRS</div>
             <div class="text-xl font-black text-slate-800 mt-1">${tickets.length} Tiket</div>
-            <div class="text-[10px] text-slate-400 mt-0.5">Semua Laporan</div>
+            <div class="text-[10px] text-slate-400 mt-0.5">Semua Laporan Ruangan</div>
           </div>
         </div>
 
@@ -134,14 +134,14 @@ export const OfficerView = {
             <!-- Priority filter -->
             <select onchange="window.filterOfficerPriority(this.value)" class="text-xs p-2 border border-slate-300 rounded-lg bg-white">
               <option value="all" ${this.priorityFilter === 'all' ? 'selected' : ''}>Semua Prioritas</option>
-              <option value="Tinggi" ${this.priorityFilter === 'Tinggi' ? 'selected' : ''}>Prioritas: Tinggi</option>
+              <option value="Tinggi" ${this.priorityFilter === 'Tinggi' ? 'selected' : ''}>Prioritas: Tinggi (Kritis RS)</option>
               <option value="Sedang" ${this.priorityFilter === 'Sedang' ? 'selected' : ''}>Prioritas: Sedang</option>
               <option value="Rendah" ${this.priorityFilter === 'Rendah' ? 'selected' : ''}>Prioritas: Rendah</option>
             </select>
 
             <!-- Application filter -->
             <select onchange="window.filterOfficerApp(this.value)" class="text-xs p-2 border border-slate-300 rounded-lg bg-white">
-              <option value="all" ${this.appFilter === 'all' ? 'selected' : ''}>Semua Aplikasi</option>
+              <option value="all" ${this.appFilter === 'all' ? 'selected' : ''}>Semua Modul SIMRS</option>
               ${apps.map(a => `
                 <option value="${a.id}" ${this.appFilter === a.id ? 'selected' : ''}>${a.name}</option>
               `).join('')}
@@ -150,9 +150,9 @@ export const OfficerView = {
 
           <!-- Search query -->
           <div class="relative w-full sm:w-64">
-            <input type="text" value="${Utils.escapeHTML(this.searchQuery)}" placeholder="Cari tiket, nama, judul..."
+            <input type="text" value="${Utils.escapeHTML(this.searchQuery)}" placeholder="Cari tiket, nama nakes, judul..."
               oninput="window.setOfficerSearch(this.value)"
-              class="w-full text-xs pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500">
+              class="w-full text-xs pl-8 pr-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500">
             <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0118 0z"></path></svg>
           </div>
         </div>
@@ -164,11 +164,11 @@ export const OfficerView = {
               <thead class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
                 <tr>
                   <th class="px-4 py-3">Nomor Tiket</th>
-                  <th class="px-4 py-3">Pelapor</th>
-                  <th class="px-4 py-3">Aplikasi & Judul</th>
+                  <th class="px-4 py-3">Pelapor / Ruangan</th>
+                  <th class="px-4 py-3">Modul SIMRS & Judul</th>
                   <th class="px-4 py-3">Prioritas</th>
                   <th class="px-4 py-3">Status</th>
-                  <th class="px-4 py-3">Penugasan Teknis</th>
+                  <th class="px-4 py-3">Penugasan IT RS</th>
                   <th class="px-4 py-3">Dibuat / Update</th>
                   <th class="px-4 py-3 text-right">Aksi</th>
                 </tr>
@@ -177,12 +177,12 @@ export const OfficerView = {
                 ${filtered.length === 0 ? `
                   <tr>
                     <td colspan="8" class="px-4 py-12 text-center text-slate-400">
-                      Tidak ada tiket yang sesuai kriteria filter.
+                      Tidak ada laporan insiden yang cocok dengan filter yang dipilih.
                     </td>
                   </tr>
                 ` : filtered.map(t => `
                   <tr class="hover:bg-slate-50/80 transition cursor-pointer" onclick="window.openTicketDetail('${t.id}')">
-                    <td class="px-4 py-3.5 font-mono font-bold text-sky-700 whitespace-nowrap">
+                    <td class="px-4 py-3.5 font-mono font-bold text-teal-800 whitespace-nowrap">
                       ${t.ticketNumber}
                     </td>
                     <td class="px-4 py-3.5">
@@ -191,7 +191,7 @@ export const OfficerView = {
                     </td>
                     <td class="px-4 py-3.5 max-w-xs">
                       <div class="flex items-center gap-1.5 mb-0.5">
-                        <span class="font-semibold text-slate-600">${t.appName}</span>
+                        <span class="font-semibold text-slate-600 truncate max-w-[140px]">${t.appName}</span>
                         ${Utils.getFeedbackTypeBadge(t.feedbackType)}
                       </div>
                       <div class="font-medium text-slate-800 truncate" title="${t.title}">${Utils.escapeHTML(t.title)}</div>
@@ -219,7 +219,7 @@ export const OfficerView = {
                         ${t.status === 'Baru' ? `
                           <button onclick="window.handleQuickVerify('${t.id}')"
                             class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold shadow-sm transition">
-                            Verifikasi
+                            Triage & Verifikasi
                           </button>
                         ` : ''}
                         <button onclick="window.openTicketDetail('${t.id}')"

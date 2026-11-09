@@ -238,11 +238,11 @@ export const TicketDetail = {
                     ${isStaff ? `
                       <label class="flex items-center gap-1.5 text-xs text-amber-800 cursor-pointer font-medium bg-amber-50 px-2 py-1 rounded border border-amber-200">
                         <input type="checkbox" id="reply-is-internal" class="rounded text-amber-600 focus:ring-amber-500">
-                        Catatan Internal (Hanya Petugas & Teknis)
+                        Catatan Internal (Hanya Helpdesk & Tim IT RS)
                       </label>
                     ` : ''}
                   </div>
-                  <button type="submit" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
+                  <button type="submit" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
                     Kirim Tanggapan
                   </button>
@@ -257,34 +257,34 @@ export const TicketDetail = {
           <!-- 1. ACTION PANEL (Role Based) -->
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
             <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center justify-between">
-              <span>Tindakan & Pengendalian</span>
-              <span class="text-[10px] text-sky-600">${currentUser.role.toUpperCase()}</span>
+              <span>Tindakan & Pengendalian IT</span>
+              <span class="text-[10px] text-teal-700 font-bold">${currentUser.role.toUpperCase()}</span>
             </h3>
 
-            <!-- Actions for Pengguna -->
+            <!-- Actions for Pengguna / Nakes -->
             ${currentUser.role === 'pengguna' ? `
               <div class="space-y-2">
                 ${ticket.status === 'Terselesaikan' ? `
                   <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-800 mb-2">
-                    <div class="font-bold mb-1">Solusi Tersedia!</div>
-                    Petugas telah memberikan solusi. Mohon periksa apakah masalah Anda sudah teratasi.
+                    <div class="font-bold mb-1">Perbaikan IT Selesai!</div>
+                    Tim IT RS telah mengirimkan hasil perbaikan. Mohon periksa apakah alur klinis di ruangan Anda sudah normal.
                   </div>
                   <button onclick="window.handleConfirmClose('${ticket.id}')" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-2 shadow-sm transition">
-                    ✓ Konfirmasi Selesai & Tutup Tiket
+                    ✓ Konfirmasi Normal & Tutup Tiket
                   </button>
                   <button onclick="window.promptReopenModal('${ticket.id}')" class="w-full py-2 px-4 bg-white border border-rose-300 text-rose-700 hover:bg-rose-50 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition">
-                    ↻ Masalah Belum Selesai (Buka Kembali)
+                    ↻ Kendala Masih Terjadi (Buka Kembali)
                   </button>
                 ` : ticket.status === 'Ditutup' ? `
                   <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600 text-center">
-                    Tiket telah ditutup. Terima kasih atas kerja samanya.
+                    Insiden SIMRS ini telah ditutup. Terima kasih atas kerja samanya.
                   </div>
                   <button onclick="window.promptReopenModal('${ticket.id}')" class="w-full py-1.5 px-3 bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 rounded-lg text-xs transition">
                     ↻ Buka Kembali Tiket
                   </button>
                 ` : `
                   <div class="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-200">
-                    Tiket Anda sedang dalam status <strong>${ticket.status}</strong>. Petugas akan segera memperbarui laporan ini.
+                    Tiket laporan ruangan Anda berstatus <strong>${ticket.status}</strong>. Tim IT RS akan segera memperbarui laporan ini.
                   </div>
                 `}
               </div>
@@ -295,35 +295,35 @@ export const TicketDetail = {
               <div class="space-y-3">
                 <!-- Status changer -->
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">Perbarui Status Tiket:</label>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Perbarui Status Insiden:</label>
                   <select id="update-ticket-status-select" onchange="window.handleStatusChange('${ticket.id}', this.value)"
-                    class="w-full text-xs p-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-sky-500">
-                    <option value="Baru" ${ticket.status === 'Baru' ? 'selected' : ''}>Baru (Menunggu Pemeriksaan)</option>
-                    <option value="Diverifikasi" ${ticket.status === 'Diverifikasi' ? 'selected' : ''}>Diverifikasi (Lolos Validasi)</option>
-                    <option value="Diproses" ${ticket.status === 'Diproses' ? 'selected' : ''}>Diproses (Sedang Dikerjakan)</option>
-                    <option value="Menunggu Pengguna" ${ticket.status === 'Menunggu Pengguna' ? 'selected' : ''}>Menunggu Pengguna (Butuh Info)</option>
+                    class="w-full text-xs p-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-teal-500">
+                    <option value="Baru" ${ticket.status === 'Baru' ? 'selected' : ''}>Baru (Menunggu Triage IT)</option>
+                    <option value="Diverifikasi" ${ticket.status === 'Diverifikasi' ? 'selected' : ''}>Diverifikasi (Validasi Urgensi)</option>
+                    <option value="Diproses" ${ticket.status === 'Diproses' ? 'selected' : ''}>Diproses (Pengerjaan Tim IT)</option>
+                    <option value="Menunggu Pengguna" ${ticket.status === 'Menunggu Pengguna' ? 'selected' : ''}>Menunggu Pengguna (Uji Coba Ruangan)</option>
                     <option value="Terselesaikan" ${ticket.status === 'Terselesaikan' ? 'selected' : ''}>Terselesaikan (Solusi Diberikan)</option>
-                    <option value="Ditutup" ${ticket.status === 'Ditutup' ? 'selected' : ''}>Ditutup (Penanganan Selesai)</option>
+                    <option value="Ditutup" ${ticket.status === 'Ditutup' ? 'selected' : ''}>Ditutup (Pelayanan Normal)</option>
                   </select>
                 </div>
 
                 <!-- Priority changer -->
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">Ubah Tingkat Prioritas:</label>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Tingkat Kegentingan (Prioritas RS):</label>
                   <select onchange="window.handlePriorityChange('${ticket.id}', this.value)"
-                    class="w-full text-xs p-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-sky-500">
-                    <option value="Tinggi" ${ticket.priority === 'Tinggi' ? 'selected' : ''}>Tinggi (Dampak Luas / Layanan Utama Berhenti)</option>
-                    <option value="Sedang" ${ticket.priority === 'Sedang' ? 'selected' : ''}>Sedang (Fungsi Terganggu, Ada Alternatif)</option>
-                    <option value="Rendah" ${ticket.priority === 'Rendah' ? 'selected' : ''}>Rendah (Pertanyaan / Usulan / UI Minor)</option>
+                    class="w-full text-xs p-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-teal-500">
+                    <option value="Tinggi" ${ticket.priority === 'Tinggi' ? 'selected' : ''}>Tinggi (Kritis / IGD / Kamar Bedah / Farmasi)</option>
+                    <option value="Sedang" ${ticket.priority === 'Sedang' ? 'selected' : ''}>Sedang (Terganggu, Ada Prosedur Manual)</option>
+                    <option value="Rendah" ${ticket.priority === 'Rendah' ? 'selected' : ''}>Rendah (Pertanyaan / Usulan Alur Klinis)</option>
                   </select>
                 </div>
 
                 <!-- Assign Tech -->
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">Tugaskan Tim Teknis:</label>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Tugaskan Tim IT RS:</label>
                   <select id="assign-tech-select" onchange="window.handleAssignTech('${ticket.id}', this.value)"
-                    class="w-full text-xs p-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-sky-500">
-                    <option value="">-- Pilih Penanggung Jawab Teknis --</option>
+                    class="w-full text-xs p-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-teal-500">
+                    <option value="">-- Pilih Staf Tim IT RS --</option>
                     ${technicalStaff.map(tech => `
                       <option value="${tech.id}" ${ticket.assignedTechId === tech.id ? 'selected' : ''}>
                         ${tech.name} (${tech.department})
@@ -466,3 +466,4 @@ export const TicketDetail = {
     }
   }
 };
+

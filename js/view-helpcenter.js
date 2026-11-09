@@ -1,5 +1,5 @@
 /**
- * Tampilan Pusat Bantuan & FAQ (Knowledge Base)
+ * Tampilan Pusat Bantuan & SOP Penanganan Gangguan IT RS (Knowledge Base)
  * Berdasarkan Dokumen Seksi 4, 10
  */
 
@@ -25,20 +25,20 @@ export const HelpCenterView = {
 
     targetElement.innerHTML = `
       <div class="max-w-4xl mx-auto space-y-8">
-        <!-- Hero Search Section -->
+        <!-- Hero Search Section (Hospital Theme) -->
         <div class="text-center space-y-4 py-6">
-          <span class="inline-block px-3 py-1 bg-sky-100 text-sky-800 rounded-full text-xs font-semibold uppercase tracking-wider">
-            Panduan Mandiri Pengguna
+          <span class="inline-block px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-xs font-semibold uppercase tracking-wider">
+            SOP & Dukungan IT Rumah Sakit
           </span>
-          <h1 class="text-3xl font-black text-slate-800 tracking-tight">Pusat Bantuan & FAQ Aplikasi</h1>
+          <h1 class="text-3xl font-black text-slate-800 tracking-tight">Pusat Bantuan & SOP Insiden SIMRS</h1>
           <p class="text-slate-500 text-sm max-w-xl mx-auto">
-            Temukan jawaban cepat atas pertanyaan dan kendala teknis yang paling sering dialami pada aplikasi kampus sebelum mengajukan tiket bantuan.
+            Panduan mandiri penanganan cepat kendala modul SIMRS (BPJS, E-Resep, RME, Billing) dan hardware ruangan medis sebelum mengajukan tiket ke Tim IT RS.
           </p>
 
           <div class="max-w-xl mx-auto relative pt-2">
-            <input type="text" value="${Utils.escapeHTML(this.searchQuery)}" placeholder="Ketik kata kunci (contoh: KRS, UKT, Sandi, Lampiran)..."
+            <input type="text" value="${Utils.escapeHTML(this.searchQuery)}" placeholder="Ketik kata kunci (contoh: VClaim, Resep, Barcode Gelang, Error 504, IGD)..."
               oninput="window.setHelpSearch(this.value)"
-              class="w-full text-sm pl-11 pr-4 py-3 border border-slate-300 rounded-2xl shadow-sm focus:ring-2 focus:ring-sky-500 focus:border-transparent">
+              class="w-full text-sm pl-11 pr-4 py-3 border border-slate-300 rounded-2xl shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent">
             <svg class="w-5 h-5 text-slate-400 absolute left-4 top-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0118 0z"></path></svg>
           </div>
         </div>
@@ -47,14 +47,14 @@ export const HelpCenterView = {
         <div class="space-y-4">
           ${filtered.length === 0 ? `
             <div class="bg-white p-12 rounded-xl border border-slate-200 text-center text-slate-400">
-              Tidak ditemukan artikel bantuan yang cocok dengan pencarian Anda.
+              Tidak ditemukan artikel panduan SIMRS yang cocok dengan pencarian Anda.
             </div>
-          ` : filtered.map((faq, idx) => `
+          ` : filtered.map((faq) => `
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition">
               <button onclick="window.toggleFaq('faq-body-${faq.id}')"
                 class="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 transition">
                 <div class="space-y-1">
-                  <span class="text-[10px] font-bold text-sky-600 uppercase tracking-wider">${faq.category}</span>
+                  <span class="text-[10px] font-bold text-teal-700 uppercase tracking-wider">${faq.category}</span>
                   <h3 class="text-sm font-bold text-slate-800">${faq.title}</h3>
                   <p class="text-xs text-slate-500">${faq.snippet}</p>
                 </div>
@@ -67,14 +67,14 @@ export const HelpCenterView = {
           `).join('')}
         </div>
 
-        <!-- Still Need Help Banner -->
-        <div class="bg-gradient-to-r from-sky-600 to-indigo-700 rounded-2xl p-6 text-white shadow-md flex flex-wrap items-center justify-between gap-4">
+        <!-- Emergency IT RS Banner -->
+        <div class="bg-gradient-to-r from-teal-700 via-teal-800 to-slate-900 rounded-2xl p-6 text-white shadow-md flex flex-wrap items-center justify-between gap-4">
           <div class="space-y-1">
-            <h3 class="text-base font-bold">Masalah Anda belum teratasi dengan panduan di atas?</h3>
-            <p class="text-xs text-sky-100">Kirimkan tiket pengaduan resmi agar petugas layanan dan tim teknis dapat segera menindaklanjutinya.</p>
+            <h3 class="text-base font-bold">Kendala klinis masih menghentikan alur pelayanan pasien?</h3>
+            <p class="text-xs text-teal-100">Kirimkan tiket insiden resmi agar Helpdesk dan Tim IT RS (Programmer & Jaringan) segera menindaklanjuti ke ruangan Anda.</p>
           </div>
-          <button onclick="window.openCreateTicketModal()" class="px-5 py-2.5 bg-white hover:bg-slate-100 text-sky-800 rounded-xl text-xs font-bold shadow transition">
-            + Ajukan Tiket Pengaduan Baru
+          <button onclick="window.openCreateTicketModal()" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-900 rounded-xl text-xs font-bold shadow transition">
+            + Laporkan Gangguan SIMRS Baru
           </button>
         </div>
       </div>

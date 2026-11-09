@@ -1,14 +1,16 @@
 {
   "name": "ur-app",
   "version": "1.0.0",
-  "description": "Sistem Informasi Pengelolaan Umpan Balik Pengguna & Tiket Layanan Berbasis Firebase",
-  "main": "index.html",
+  "description": "SIMRS Care & IT Support RS - Sistem Pengelolaan Layanan & Gangguan SIMRS Berbasis Firebase",
+  "main": "server.js",
   "scripts": {
-    "start": "python3 -m http.server 3000",
-    "serve": "npx serve ."
+    "dev": "node server.js",
+    "start": "node server.js",
+    "serve": "node server.js"
   },
   "keywords": [
-    "feedback",
+    "simrs",
+    "hospital-it",
     "helpdesk",
     "ticket-system",
     "firebase",

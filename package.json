@@ -1,0 +1,19 @@
+{
+  "name": "ur-app",
+  "version": "1.0.0",
+  "description": "Sistem Informasi Pengelolaan Umpan Balik Pengguna & Tiket Layanan Berbasis Firebase",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 3000",
+    "serve": "npx serve ."
+  },
+  "keywords": [
+    "feedback",
+    "helpdesk",
+    "ticket-system",
+    "firebase",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT"
+}

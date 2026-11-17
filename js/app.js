@@ -84,17 +84,6 @@ class AppController {
           <div>
             <div class="flex items-center gap-2">
               <span class="font-black text-slate-800 text-base tracking-tight">SIMRS Care</span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-100 text-teal-800">IT Support RS</span>
-              ${firebaseManager.isLive ? `
-                <span class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Firebase Live
-                </span>
-              ` : `
-                <span class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200" title="Klik menu Admin untuk menghubungkan Firestore live">
-                  Local Mode RS
-                </span>
-              `}
             </div>
             <p class="text-[10px] text-slate-400 hidden sm:block">Instalasi TI & Layanan Dukungan SIMRS Rumah Sakit</p>
           </div>
